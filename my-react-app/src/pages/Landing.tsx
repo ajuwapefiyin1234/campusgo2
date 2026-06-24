@@ -90,7 +90,7 @@ export default function Landing() {
           }`}
           style={{ backgroundImage: `url(${currentCategory.image})` }}
         >
-          <div className={`absolute inset-0 bg-gradient-to-r ${currentCategory.color} to-black/70`} />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/70" />
         </div>
 
         {/* Content */}

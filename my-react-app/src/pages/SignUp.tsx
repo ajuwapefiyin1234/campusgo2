@@ -1,110 +1,91 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Link } from 'react-router-dom'
-import { UserPlus } from 'lucide-react'
-
-const signUpSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string().min(6, 'Password must be at least 6 characters'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ['confirmPassword'],
-})
-
-type SignUpFormData = z.infer<typeof signUpSchema>
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function SignUp() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
-  })
+  const [isSuccess, setIsSuccess] = useState(false)
+  const navigate = useNavigate()
 
-  const onSubmit = (data: SignUpFormData) => {
-    console.log('Sign Up:', data)
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSuccess(true)
+    setTimeout(() => {
+      navigate('/login')
+    }, 2000)
   }
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-surface p-8 rounded-xl border border-gray-700">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Create Account</h1>
-          <p className="text-text-muted">Join CampusGo today</p>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">Full Name</label>
-            <input
-              type="text"
-              {...register('name')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
-              placeholder="John Doe"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
+    <div style={{ minHeight: '100vh', paddingTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backgroundColor: '#111827' }}>
+      <div style={{ maxWidth: '448px', width: '100%', backgroundColor: '#1f2937', padding: '32px', borderRadius: '12px', border: '1px solid #374151' }}>
+        {isSuccess ? (
+          <div style={{ textAlign: 'center', padding: '32px 0' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>✓</div>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '8px', color: 'white' }}>Account Created!</h2>
+            <p style={{ color: '#9ca3af', marginBottom: '16px' }}>Redirecting to login...</p>
           </div>
+        ) : (
+          <>
+            <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+              <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px', color: 'white' }}>Create Account</h1>
+              <p style={{ color: '#9ca3af' }}>Join CampusGo today</p>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
-            <input
-              type="email"
-              {...register('email')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
-              placeholder="your@email.com"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
-          </div>
+            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Full Name</label>
+                <input
+                  type="text"
+                  style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <input
-              type="password"
-              {...register('password')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
-              placeholder="••••••••"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-            )}
-          </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Email</label>
+                <input
+                  type="email"
+                  style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-2">Confirm Password</label>
-            <input
-              type="password"
-              {...register('confirmPassword')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
-              placeholder="••••••••"
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>
-            )}
-          </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Password</label>
+                <input
+                  type="password"
+                  style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
 
-          <button
-            type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
-          >
-            <UserPlus className="w-5 h-5" />
-            Create Account
-          </button>
-        </form>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Confirm Password</label>
+                <input
+                  type="password"
+                  style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
 
-        <p className="text-center mt-6 text-text-muted">
-          Already have an account?{' '}
-          <Link to="/login" className="text-primary hover:underline">
-            Sign in
-          </Link>
-        </p>
+              <button
+                type="submit"
+                style={{ width: '100%', backgroundColor: '#4f46e5', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', border: 'none' }}
+              >
+                Create Account
+              </button>
+            </form>
+
+            <p style={{ textAlign: 'center', marginTop: '24px', color: '#9ca3af' }}>
+              Already have an account?{' '}
+              <Link to="/login" style={{ color: '#818cf8', textDecoration: 'underline' }}>
+                Sign in
+              </Link>
+            </p>
+          </>
+        )}
       </div>
     </div>
   )

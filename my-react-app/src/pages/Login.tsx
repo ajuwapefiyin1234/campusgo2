@@ -1,76 +1,51 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { Link } from 'react-router-dom'
-import { LogIn } from 'lucide-react'
-
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  })
-
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login:', data)
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log('Login submitted')
   }
 
   return (
-    <div className="min-h-screen pt-20 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-surface p-8 rounded-xl border border-gray-700">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-          <p className="text-text-muted">Sign in to your CampusGo account</p>
+    <div style={{ minHeight: '100vh', paddingTop: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px', backgroundColor: '#111827' }}>
+      <div style={{ maxWidth: '448px', width: '100%', backgroundColor: '#1f2937', padding: '32px', borderRadius: '12px', border: '1px solid #374151' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px', color: 'white' }}>Welcome Back</h1>
+          <p style={{ color: '#9ca3af' }}>Sign in to your CampusGo account</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
-            <label className="block text-sm font-medium mb-2">Email</label>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Email</label>
             <input
               type="email"
-              {...register('email')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
+              style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
               placeholder="your@email.com"
+              required
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
+            <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', marginBottom: '8px', color: 'white' }}>Password</label>
             <input
               type="password"
-              {...register('password')}
-              className="w-full bg-background border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-primary transition"
+              style={{ width: '100%', backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px', padding: '12px 16px', color: 'white' }}
               placeholder="••••••••"
+              required
             />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-            )}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
+            style={{ width: '100%', backgroundColor: '#4f46e5', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', border: 'none' }}
           >
-            <LogIn className="w-5 h-5" />
             Sign In
           </button>
         </form>
 
-        <p className="text-center mt-6 text-text-muted">
+        <p style={{ textAlign: 'center', marginTop: '24px', color: '#9ca3af' }}>
           Don't have an account?{' '}
-          <Link to="/signup" className="text-primary hover:underline">
+          <Link to="/signup" style={{ color: '#818cf8', textDecoration: 'underline' }}>
             Sign up
           </Link>
         </p>
